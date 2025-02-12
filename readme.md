@@ -1,5 +1,5 @@
 # Flask GenAI Chatbot
-# Anirban Sarkar : Instagram -> bong_ani_007
+
 This guide will help you set up a Flask project with a virtual environment, install dependencies, generate a Gemini API key, and run your GenAI chatbot.
 
 ---
@@ -59,7 +59,14 @@ By default, it will run on `http://127.0.0.1:5000/`.
 
 ---
 
-## 5. Deactivate the Virtual Environment
+## 5. Demo
+Here is a screenshot of the chatbot in action:
+
+![Chatbot Demo](image.png)
+
+---
+
+## 6. Deactivate the Virtual Environment
 When you're done, deactivate the virtual environment by running:
 ```bash
 deactivate
