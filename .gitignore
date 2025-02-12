@@ -1,0 +1,36 @@
+# Ignore environment variables and API keys
+.env
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore dependencies installed via pip
+*.egg-info/
+pip-log.txt
+
+# Ignore logs and cache
+logs/
+*.log
+
+# Ignore database files (if using SQLite)
+*.sqlite3
+*.db
+
+# Ignore node_modules (if frontend is included)
+node_modules/

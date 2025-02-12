@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script> <!-- Markdown Parser -->
+</head>
+<body>
+    <div class="container">
+        <h1>GenAI Chat Assistant</h1>
+        <div class="chat-container" id="chat-box">
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        <a id="links" target="_blank" href="https://instagram.com/bong_ani_007">CREATED BY - Anirban Sarkar</a>
+    </div>
+
+    <script>
+        function appendMessage(message, isUser) {
+            const chatBox = document.getElementById('chat-box');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = isUser ? 'user-message' : 'bot-message';
+
+            if (!isUser) {
+                messageDiv.innerHTML = marked.parse(message);  
+            } else {
+                messageDiv.textContent = message;
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            
+            if (message) {
+                appendMessage(message, true);
+                userInput.value = '';
+                
+                // loading element
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'loading-message bot-message';
+                
+                const spinner = document.createElement('div');
+                spinner.className = 'futuristic-spinner';
+                
+                const loadingText = document.createElement('span');
+                loadingText.textContent = 'Generating ...';
+                loadingText.style.animation = 'pulse-glow 1.5s infinite';
+                loadingText.style.color = '#00f3ff';
+                
+                loadingDiv.appendChild(spinner);
+                loadingDiv.appendChild(loadingText);
+                
+                const chatBox = document.getElementById('chat-box');
+                chatBox.appendChild(loadingDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+        
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `message=${encodeURIComponent(message)}`
+                    });
+                    
+                    const data = await response.json();
+                    chatBox.removeChild(loadingDiv); 
+                    
+                    if (data.response) {
+                        appendMessage(data.response, false);
+                    } else {
+                        appendMessage('⚠️ Error: Could not get response', false);
+                    }
+                } catch (error) {
+                    chatBox.removeChild(loadingDiv); 
+                    appendMessage('❌ Error: Connection failed', false);
+                }
+            }
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
